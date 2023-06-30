@@ -1,0 +1,16 @@
+---
+- name: Backup Cisco and Palo Alto Configurations
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Backup Cisco Configurations
+      ios_command:
+        commands:
+          - show running-config
+      register: cisco_output
+
+    - name: Save Cisco Configuration Backup
+      copy:
+        content: "{{ cisco_output.stdout[0] }}"
+        dest: "/home/joseph.johnson/projects/ansible-backups/cisco/cisco_config.txt"
